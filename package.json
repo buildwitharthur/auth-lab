@@ -1,12 +1,10 @@
 {
-  "name": "authlab",
-  "private": true,
-  "scripts": {
-    "dev": "pnpm --parallel --filter './apps/*' dev",
-    "dev:web": "pnpm --filter './apps/web' dev",
-    "dev:api": "pnpm --filter './apps/api' dev",
-    "build": "pnpm --recursive --if-present build",
-    "check-types": "pnpm --recursive --if-present check-types",
-    "lint": "pnpm --recursive --if-present lint"
-  }
+    "name": "authlab",
+    "private": true,
+    "scripts": {
+        "dev": "pnpm -r --parallel --if-present run dev",
+        "build": "pnpm -r --if-present run build",
+        "dev:web": "pnpm --filter @authlab/web run dev",
+        "dev:api": "pnpm --filter @authlab/api run dev"
+    }
 }
