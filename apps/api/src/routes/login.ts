@@ -50,5 +50,12 @@ loginRouter.post('/auth/login', authRateLimit, async (request, response) => {
 
     response.cookie(AUTH_COOKIE_NAME, token, authCookieOptions)
 
-    return response.status(200)
+    return response.status(200).json({
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            createdAt: user.createdAt,
+        },
+    })
 })
