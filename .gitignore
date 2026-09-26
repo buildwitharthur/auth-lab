@@ -17,6 +17,8 @@ _docpress
 
 lib
 !apps/api/src/lib/
+!apps/web/src/lib/
+!apps/web/src/lib/**
 dist
 /apps/api/build/
 /apps/api/src/generated/prisma/
