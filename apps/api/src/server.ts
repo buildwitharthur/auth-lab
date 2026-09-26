@@ -7,6 +7,8 @@ import express from 'express'
 import { createAccountRouter } from './routes/create-account.js'
 import { healthRouter } from './routes/health.js'
 import { loginRouter } from './routes/login.js'
+import { logoutRouter } from './routes/logout.js'
+import { profileRouter } from './routes/profile.js'
 
 const app = express()
 
@@ -23,6 +25,8 @@ app.use(cookieParser())
 app.use(healthRouter)
 app.use(createAccountRouter)
 app.use(loginRouter)
+app.use(profileRouter)
+app.use(logoutRouter)
 
 const port = Number(process.env.PORT) || 3333
 

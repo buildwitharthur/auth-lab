@@ -9,3 +9,10 @@ export const authCookieOptions: CookieOptions = {
     path: '/',
     maxAge: 1000 * 60 * 60 * 24 * 7,
 }
+
+export const authCookieClearOptions: CookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+}
