@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { AUTH_COOKIE_NAME, authCookieOptions } from '../lib/auth-cookie.js'
 import { createAuthToken } from '../lib/auth-token.js'
 import { prisma } from '../lib/prisma.js'
+import { authRateLimit } from '../middlewares/rate-limit.js'
 
 const createAccountSchema = z.object({
     name: z.string().trim().min(2).max(100),
@@ -15,7 +16,7 @@ const createAccountSchema = z.object({
 
 export const createAccountRouter = Router()
 
-createAccountRouter.post('/auth/create-account', async (request, response) => {
+createAccountRouter.post('/auth/create-account', authRateLimit, async (request, response) => {
     const result = createAccountSchema.safeParse(request.body)
 
     if (!result.success) {

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { AUTH_COOKIE_NAME, authCookieOptions } from '../lib/auth-cookie.js'
 import { createAuthToken } from '../lib/auth-token.js'
 import { prisma } from '../lib/prisma.js'
+import { authRateLimit } from '../middlewares/rate-limit.js'
 
 const loginSchema = z.object({
     email: z.string().trim().email().toLowerCase(),
@@ -13,7 +14,7 @@ const loginSchema = z.object({
 
 export const loginRouter = Router()
 
-loginRouter.post('/auth/login', async (request, response) => {
+loginRouter.post('/auth/login', authRateLimit, async (request, response) => {
     const result = loginSchema.safeParse(request.body)
 
     if (!result.success) {

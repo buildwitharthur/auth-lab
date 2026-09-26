@@ -1,9 +1,10 @@
-import "dotenv/config";
+import 'dotenv/config'
 
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 
+import { errorHandler } from './middlewares/error-handler.js'
 import { createAccountRouter } from './routes/create-account.js'
 import { healthRouter } from './routes/health.js'
 import { loginRouter } from './routes/login.js'
@@ -27,6 +28,8 @@ app.use(createAccountRouter)
 app.use(loginRouter)
 app.use(profileRouter)
 app.use(logoutRouter)
+
+app.use(errorHandler)
 
 const port = Number(process.env.PORT) || 3333
 
