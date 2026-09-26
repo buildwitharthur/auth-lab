@@ -7,26 +7,16 @@ import { z } from 'zod'
 
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
-import { createAccount } from '../../http/create-account'
+import { login } from '../../http/login'
 
-const createAccountSchema = z.object({
-    name: z
-        .string()
-        .trim()
-        .min(2, 'Informe seu nome.')
-        .max(100, 'Nome muito longo.'),
-
+const loginSchema = z.object({
     email: z.string().trim().email('Informe um e-mail válido.'),
-
-    password: z
-        .string()
-        .min(8, 'A senha deve ter pelo menos 8 caracteres.')
-        .max(72, 'Senha muito longa.'),
+    password: z.string().min(1, 'Informe sua senha.'),
 })
 
-type CreateAccountFormData = z.infer<typeof createAccountSchema>
+type LoginFormData = z.infer<typeof loginSchema>
 
-export function CreateAccountForm() {
+export function LoginForm() {
     const navigate = useNavigate()
 
     const {
@@ -34,31 +24,46 @@ export function CreateAccountForm() {
         handleSubmit,
         setError,
         formState: { errors },
-    } = useForm<CreateAccountFormData>({
-        resolver: zodResolver(createAccountSchema),
+    } = useForm<LoginFormData>({
+        resolver: zodResolver(loginSchema),
     })
 
-    const createAccountMutation = useMutation({
-        mutationFn: createAccount,
+    const loginMutation = useMutation({
+        mutationFn: login,
         onSuccess: () => {
             navigate({ to: '/' })
         },
         onError: (error) => {
-            if (axios.isAxiosError(error) && error.response?.status === 409) {
-                setError('email', {
-                    message: 'Este e-mail já está em uso.',
-                })
-                return
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 401) {
+                    setError('root', { message: 'Credenciais inválidas.' })
+                    return
+                }
+
+                if (error.response?.status === 400) {
+                    setError('root', {
+                        message: 'Verifique os dados informados.',
+                    })
+                    return
+                }
+
+                if (error.response?.status === 429) {
+                    setError('root', {
+                        message:
+                            'Muitas tentativas. Tente novamente em alguns minutos.',
+                    })
+                    return
+                }
             }
 
             setError('root', {
-                message: 'Não foi possível criar sua conta. Tente novamente.',
+                message: 'Não foi possível entrar. Tente novamente.',
             })
         },
     })
 
-    async function onSubmit(data: CreateAccountFormData) {
-        createAccountMutation.mutate(data)
+    async function onSubmit(data: LoginFormData) {
+        loginMutation.mutate(data)
     }
 
     return (
@@ -67,15 +72,6 @@ export function CreateAccountForm() {
             noValidate
             className="flex flex-col gap-4"
         >
-            <Input
-                id="name"
-                label="Nome"
-                autoComplete="name"
-                placeholder="Arthur Reis"
-                error={errors.name?.message}
-                {...register('name')}
-            />
-
             <Input
                 id="email"
                 label="E-mail"
@@ -93,8 +89,8 @@ export function CreateAccountForm() {
                 id="password"
                 label="Senha"
                 type="password"
-                autoComplete="new-password"
-                placeholder="******"
+                autoComplete="current-password"
+                placeholder="Sua senha"
                 error={errors.password?.message}
                 {...register('password')}
             />
@@ -108,18 +104,16 @@ export function CreateAccountForm() {
             <Button
                 type="submit"
                 fullWidth
-                disabled={createAccountMutation.isPending}
+                disabled={loginMutation.isPending}
                 className="mt-4"
             >
-                {createAccountMutation.isPending
-                    ? 'Criando conta...'
-                    : 'Criar conta'}
+                {loginMutation.isPending ? 'Entrando...' : 'Entrar'}
             </Button>
 
             <p className="text-center text-sm text-text-muted">
-                Já possui uma conta?{' '}
-                <Link to="/" className="font-medium text-text">
-                    Acesse sua conta
+                Ainda não tem uma conta?{' '}
+                <Link to="/create-account" className="font-medium text-text">
+                    Criar conta
                 </Link>
             </p>
         </form>
