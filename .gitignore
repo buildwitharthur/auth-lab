@@ -16,7 +16,9 @@ _docpress
 .DS_Store
 
 lib
+!apps/api/src/lib/
 dist
+/apps/api/build/
 tsconfig.tsbuildinfo
 tsconfig.lint.tsbuildinfo
 test.lib/
