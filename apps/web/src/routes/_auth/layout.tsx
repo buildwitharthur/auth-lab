@@ -3,13 +3,15 @@ import { Suspense } from 'react'
 
 import { useProfile } from '../../hooks/use-profile'
 
+import { AuthSkeleton } from './-components/auth-skeleton'
+
 export const Route = createFileRoute('/_auth')({
     component: AuthLayout,
 })
 
 function AuthLayout() {
     return (
-        <Suspense fallback={<div className="flex-1" />}>
+        <Suspense fallback={<AuthSkeleton />}>
             <PublicAuthContent />
         </Suspense>
     )

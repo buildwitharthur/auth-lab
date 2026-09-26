@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 
 import { Footer } from '../components/footer'
 import { Header } from '../components/header'
+import { HeaderSkeleton } from '../components/header-skeleton'
 
 import '../styles.css'
 
@@ -13,7 +14,7 @@ export const Route = createRootRoute({
 function RootLayout() {
     return (
         <div className="flex min-h-screen flex-col">
-            <Suspense fallback={<div className="h-16" />}>
+            <Suspense fallback={<HeaderSkeleton />}>
                 <Header />
             </Suspense>
 
