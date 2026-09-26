@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { login } from '../../http/login'
+import { profileQueryKey } from '../../hooks/use-profile'
 
 const loginSchema = z.object({
     email: z.string().trim().email('Informe um e-mail válido.'),
@@ -18,6 +19,7 @@ type LoginFormData = z.infer<typeof loginSchema>
 
 export function LoginForm() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const {
         register,
@@ -30,7 +32,8 @@ export function LoginForm() {
 
     const loginMutation = useMutation({
         mutationFn: login,
-        onSuccess: () => {
+        onSuccess: (data) => {
+            queryClient.setQueryData(profileQueryKey, data)
             navigate({ to: '/app' })
         },
         onError: (error) => {

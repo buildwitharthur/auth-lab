@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from '@tanstack/react-router'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { Button } from '../../components/ui/button'
 import { Input } from '../../components/ui/input'
 import { createAccount } from '../../http/create-account'
+import { profileQueryKey } from '../../hooks/use-profile'
 
 const createAccountSchema = z.object({
     name: z
@@ -28,6 +29,7 @@ type CreateAccountFormData = z.infer<typeof createAccountSchema>
 
 export function CreateAccountForm() {
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     const {
         register,
@@ -40,7 +42,8 @@ export function CreateAccountForm() {
 
     const createAccountMutation = useMutation({
         mutationFn: createAccount,
-        onSuccess: () => {
+        onSuccess: (data) => {
+            queryClient.setQueryData(profileQueryKey, data)
             navigate({ to: '/app' })
         },
         onError: (error) => {

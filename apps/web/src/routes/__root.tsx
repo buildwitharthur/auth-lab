@@ -1,4 +1,5 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Suspense } from 'react'
 
 import { Footer } from '../components/footer'
 import { Header } from '../components/header'
@@ -12,7 +13,9 @@ export const Route = createRootRoute({
 function RootLayout() {
     return (
         <div className="flex min-h-screen flex-col">
-            <Header />
+            <Suspense fallback={<div className="h-16" />}>
+                <Header />
+            </Suspense>
 
             <main className="flex flex-1 flex-col">
                 <Outlet />

@@ -1,12 +1,11 @@
 import labLogo from '../assets/lab-logo.svg'
+import { useProfile } from '../hooks/use-profile'
 
 import { LogoutButton } from './logout-button'
 
-interface HeaderProps {
-    authenticated?: boolean
-}
+export function Header() {
+    const { data: profile } = useProfile()
 
-export function Header({ authenticated = false }: HeaderProps) {
     return (
         <header className="flex h-16 items-center justify-between px-6 sm:px-8">
             <div className="flex min-w-0 items-center gap-3">
@@ -24,7 +23,7 @@ export function Header({ authenticated = false }: HeaderProps) {
                 </span>
             </div>
 
-            {authenticated ? <LogoutButton /> : null}
+            {profile ? <LogoutButton /> : null}
         </header>
     )
 }

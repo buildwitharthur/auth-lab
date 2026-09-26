@@ -1,30 +1,15 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import axios from 'axios'
 
-import { getProfile } from '../../http/profile'
+import { useProfile } from '../../hooks/use-profile'
 
 export const Route = createFileRoute('/app/')({
     component: AppPage,
 })
 
 function AppPage() {
-    const { data } = useSuspenseQuery({
-        queryKey: ['profile'],
-        queryFn: () =>
-            getProfile().catch((error) => {
-                if (
-                    axios.isAxiosError(error) &&
-                    error.response?.status === 401
-                ) {
-                    return null
-                }
+    const { data: profile } = useProfile()
 
-                return Promise.reject(error)
-            }),
-    })
-
-    const firstName = data!.user.name.trim().split(/\s+/)[0]
+    const firstName = profile!.user.name.trim().split(/\s+/)[0]
 
     return (
         <main className="px-6 pt-12 pb-8 sm:px-8 sm:pt-24 sm:pb-12">
