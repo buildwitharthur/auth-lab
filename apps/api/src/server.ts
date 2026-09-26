@@ -6,6 +6,7 @@ import express from 'express'
 
 import { createAccountRouter } from './routes/create-account.js'
 import { healthRouter } from './routes/health.js'
+import { loginRouter } from './routes/login.js'
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cookieParser())
 
 app.use(healthRouter)
 app.use(createAccountRouter)
+app.use(loginRouter)
 
 const port = Number(process.env.PORT) || 3333
 
