@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "^5.103.2",
@@ -20,9 +21,11 @@
     "axios": "^1.20.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hook-form": "^7.88.0",
     "tailwind-merge": "^3.7.0",
     "tailwind-variants": "^3.3.1",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@tanstack/devtools-vite": "latest",
