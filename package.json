@@ -5,6 +5,7 @@
         "dev": "pnpm -r --parallel --if-present run dev",
         "build": "pnpm -r --if-present run build",
         "dev:web": "pnpm --filter @authlab/web run dev",
-        "dev:api": "pnpm --filter @authlab/api run dev"
+        "dev:api": "pnpm --filter @authlab/api run dev",
+        "start:api": "pnpm --filter @authlab/api run start"
     }
 }
