@@ -41,7 +41,7 @@ export function CreateAccountForm() {
     const createAccountMutation = useMutation({
         mutationFn: createAccount,
         onSuccess: () => {
-            navigate({ to: '/' })
+            navigate({ to: '/app' })
         },
         onError: (error) => {
             if (axios.isAxiosError(error) && error.response?.status === 409) {

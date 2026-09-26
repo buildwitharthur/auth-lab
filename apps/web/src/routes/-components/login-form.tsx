@@ -31,7 +31,7 @@ export function LoginForm() {
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: () => {
-            navigate({ to: '/' })
+            navigate({ to: '/app' })
         },
         onError: (error) => {
             if (axios.isAxiosError(error)) {
