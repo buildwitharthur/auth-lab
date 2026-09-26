@@ -3,9 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "tsx watch --env-file=.env src/server.ts",
+        "dev": "tsx --watch src/server.ts",
         "build": "prisma generate && tsc --rootDir src --outDir build",
-        "start": "node --env-file=.env build/server.js",
+        "start": "node build/server.js",
         "db:generate": "prisma generate",
         "db:migrate": "prisma migrate dev",
         "db:deploy": "prisma migrate deploy",
@@ -16,6 +16,7 @@
         "@prisma/client": "^7.10.0",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.6",
+        "dotenv": "^18.0.3",
         "express": "^5.2.1",
         "pg": "^8.23.0"
     },
