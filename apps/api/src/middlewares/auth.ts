@@ -1,13 +1,7 @@
 import type { RequestHandler } from 'express'
-import jwt from 'jsonwebtoken'
 
 import { AUTH_COOKIE_NAME } from '../lib/auth-cookie.js'
-
-const jwtSecret = process.env.JWT_SECRET
-
-if (!jwtSecret) {
-    throw new Error('JWT_SECRET is not defined.')
-}
+import { verifyAuthToken } from '../lib/auth-token.js'
 
 export const authMiddleware: RequestHandler = (request, response, next) => {
     const token = request.cookies[AUTH_COOKIE_NAME]
@@ -19,9 +13,7 @@ export const authMiddleware: RequestHandler = (request, response, next) => {
     }
 
     try {
-        const payload = jwt.verify(token, jwtSecret, {
-            algorithms: ['HS256'],
-        })
+        const payload = verifyAuthToken(token)
 
         if (
             typeof payload !== 'object' ||

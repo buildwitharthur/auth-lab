@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 
+import { createAccountRouter } from './routes/create-account.js'
 import { healthRouter } from './routes/health.js'
 
 const app = express()
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(healthRouter)
+app.use(createAccountRouter)
 
 const port = Number(process.env.PORT) || 3333
 
