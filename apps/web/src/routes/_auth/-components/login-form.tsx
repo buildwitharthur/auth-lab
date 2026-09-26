@@ -5,10 +5,10 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '../../components/ui/button'
-import { Input } from '../../components/ui/input'
-import { login } from '../../http/login'
-import { profileQueryKey } from '../../hooks/use-profile'
+import { Button } from '../../../components/ui/button'
+import { Input } from '../../../components/ui/input'
+import { profileQueryKey } from '../../../hooks/use-profile'
+import { login } from '../../../http/login'
 
 const loginSchema = z.object({
     email: z.string().trim().email('Informe um e-mail válido.'),

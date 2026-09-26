@@ -5,10 +5,10 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Button } from '../../components/ui/button'
-import { Input } from '../../components/ui/input'
-import { createAccount } from '../../http/create-account'
-import { profileQueryKey } from '../../hooks/use-profile'
+import { Button } from '../../../components/ui/button'
+import { Input } from '../../../components/ui/input'
+import { profileQueryKey } from '../../../hooks/use-profile'
+import { createAccount } from '../../../http/create-account'
 
 const createAccountSchema = z.object({
     name: z

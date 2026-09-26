@@ -1,22 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { LoginForm } from './-components/login-form'
+import { CreateAccountForm } from './-components/create-account-form'
 
-export const Route = createFileRoute('/')({
-    component: LoginPage,
+export const Route = createFileRoute('/_auth/create-account')({
+    component: CreateAccountPage,
 })
 
-function LoginPage() {
+function CreateAccountPage() {
     return (
         <main className="flex flex-1 items-center justify-center px-6 py-12">
             <div className="w-full max-w-[360px]">
-                <h1 className="text-title text-text">Entre na sua conta</h1>
+                <h1 className="text-title text-text">Crie sua conta</h1>
                 <p className="mt-1.5 text-text-muted">
-                    Use suas credenciais para continuar.
+                    Preencha seus dados para continuar.
                 </p>
 
                 <div className="mt-8">
-                    <LoginForm />
+                    <CreateAccountForm />
                 </div>
             </div>
         </main>

@@ -9,14 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLayoutRouteImport } from './routes/_auth/layout'
 import { Route as AppLayoutRouteImport } from './routes/app/layout'
-import { Route as CreateAccountRouteImport } from './routes/create-account'
+import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthCreateAccountRouteImport } from './routes/_auth/create-account'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthLayoutRoute = AuthLayoutRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppLayoutRoute = AppLayoutRouteImport.update({
@@ -24,10 +24,15 @@ const AppLayoutRoute = AppLayoutRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateAccountRoute = CreateAccountRouteImport.update({
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const AuthCreateAccountRoute = AuthCreateAccountRouteImport.update({
   id: '/create-account',
   path: '/create-account',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
@@ -36,44 +41,50 @@ const AppIndexRoute = AppIndexRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthIndexRoute
   '/app': typeof AppLayoutRouteWithChildren
-  '/create-account': typeof CreateAccountRoute
+  '/create-account': typeof AuthCreateAccountRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/create-account': typeof CreateAccountRoute
+  '/create-account': typeof AuthCreateAccountRoute
+  '/': typeof AuthIndexRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_auth': typeof AuthLayoutRouteWithChildren
   '/app': typeof AppLayoutRouteWithChildren
-  '/create-account': typeof CreateAccountRoute
+  '/_auth/create-account': typeof AuthCreateAccountRoute
+  '/_auth/': typeof AuthIndexRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/app' | '/create-account' | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create-account' | '/app'
-  id: '__root__' | '/' | '/app' | '/create-account' | '/app/'
+  to: '/create-account' | '/' | '/app'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/app'
+    | '/_auth/create-account'
+    | '/_auth/'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
   AppLayoutRoute: typeof AppLayoutRouteWithChildren
-  CreateAccountRoute: typeof CreateAccountRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -83,12 +94,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/create-account': {
-      id: '/create-account'
+    '/_auth/': {
+      id: '/_auth/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth/create-account': {
+      id: '/_auth/create-account'
       path: '/create-account'
       fullPath: '/create-account'
-      preLoaderRoute: typeof CreateAccountRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthCreateAccountRouteImport
+      parentRoute: typeof AuthLayoutRoute
     }
     '/app/': {
       id: '/app/'
@@ -99,6 +117,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthLayoutRouteChildren {
+  AuthCreateAccountRoute: typeof AuthCreateAccountRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+}
+
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthCreateAccountRoute: AuthCreateAccountRoute,
+  AuthIndexRoute: AuthIndexRoute,
+}
+
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
+)
 
 interface AppLayoutRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
@@ -113,9 +145,8 @@ const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
   AppLayoutRoute: AppLayoutRouteWithChildren,
-  CreateAccountRoute: CreateAccountRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
