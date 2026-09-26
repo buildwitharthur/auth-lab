@@ -19,6 +19,7 @@ lib
 !apps/api/src/lib/
 dist
 /apps/api/build/
+/apps/api/src/generated/prisma/
 tsconfig.tsbuildinfo
 tsconfig.lint.tsbuildinfo
 test.lib/
